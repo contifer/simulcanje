@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" >
 	<title>Simulador liquidaciones/canjes</title>
 	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -9,14 +9,21 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <!-------------------------- CSS -------------------------------------->
-	<style>
+<style>
 	*{
 			margin:0;
 			padding:0;
-			box-sizing: content-box;
+			box-sizing: border-box;
 			font-family: 'Poppins', sans-serif;
 			float:flex;
+			text-align: center;
+
 			
+	}
+
+	body{
+		max-width:100vw;
+		padding-bottom: 20px;
 	}
 
 	a:link, a:visited, a:active {
@@ -26,16 +33,17 @@
 	}
 
 	.formulario{
-	max-width: 800px;
+	
 	background: #FAFAFA;
 	padding: 5px;
-	margin: 30px auto;
+	margin: 20px auto;
 	box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.35);
 	border-radius: 10px;
 	border: 3px solid #305A72;
 	}
+
 	.titPpal{
-		padding-top: 15px;
+		padding-top: 35px;
 	}
 
 	.enunciado{
@@ -45,25 +53,32 @@
 	}
 	.tituloPrincipal{
 		color: #305A72;
-		text-align: center;
 		font-size: 1.5rem;
+		
 	}
 	.tipos{
 		display: inline-block;
 		border: 0.3px solid grey;
 		border-radius: 25px;
-		padding: 2%;
+		padding: 5px;
 		margin:auto;
+		
 	}
 
 	.tipos2{
 		display: inline-block;
-		padding: 1%;
+		padding: 5px;
 		margin:auto;
+		max-width: 250px;
 		
 		}
 
-
+	.inputSisa {
+		display: inline;
+		
+		margin-right: 6px;
+		margin-left: 6px;
+	}
 	.section{
 		
 		display: flex;
@@ -73,15 +88,11 @@
 	}
 	
 	.resultados{
-
-	background: #FAFAFA;
-	margin: auto;
-	box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.35);
-	border-radius: 10px;
-	border: 3px solid #305A72;
-	max-width: 1200px;
-	
-
+		background: #FAFAFA;
+		margin: auto;
+		box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.35);
+		border-radius: 10px;
+		border: 3px solid #305A72;
 	}
 	.resultadosDiv{
 		margin:auto;
@@ -94,13 +105,29 @@
 		background-color: white;
 		border-radius: 5px;
 		border: 0.5px solid;
+		
 	}
+
+	.factor{
+		text-align: center;
+		width: 100px;
+		background-color: white;
+		border-radius: 5px;
+		border: solid 0.5px;
+		
+	}
+
+	input[type=number]::-webkit-inner-spin-button, 
+	input[type=number]::-webkit-outer-spin-button { 
+  		-webkit-appearance: none; 
+  		margin: 0; 
+	}
+	
 	.button {
 		background-color: #4CAF50; /* Green */
 		border: none;
 		color: white;
 		padding: 10px 25px;
-		text-align: center;
 		text-decoration: none;
 		font-size: 20px;
 		margin: auto;
@@ -124,11 +151,13 @@
 	::placeholder {
 	  
 	  font-size: 0.8rem;
+	  text-align: center;
 	}
 
 		textarea {
+
 	  resize: none;
-	  text-align: center;
+	  
 	}
 
 	.popover-content {
@@ -137,15 +166,15 @@
 		font-size: 11px;
 		}
 
-	</style>
+</style>
 <!-------------------------- CSS -------------------------------------->
 
 <!-------------------------- JS  -------------------------------------->
 <script>
 
 	$(document).ready(function(){
-  $('[data-toggle="popover"]').popover();   
-});
+  		$('[data-toggle="popover"]').popover();   
+	});
 
 	let kilos, usd, tipoDeCambio, factor, importeBruto, iva, subtotalBruto, comision, sellado, ivaServicios, retIva, retGcias2, retGcias, retIB, cbuIva, aFinal, neto;
 	let minNI = 142400;
@@ -184,6 +213,17 @@
 		  return false;
 		}
 		}
+
+	function calcularGanancias(){
+		 if (retGcias > 599) {
+	    	retGcias2 = retGcias;
+	    } 
+
+	    if (retGcias < 599) {
+	    	retGcias2 = 0;
+	    }
+
+	}
 	
 	function asignar(){
 
@@ -205,11 +245,13 @@
 						alert("Debe ingresar factor");}
 					else{
 						factor = parseFloat(document.getElementById("factor").value)/100; /*NORMAL*/
+
 					}
 		}
 
         else if (document.getElementById("Parcial").checked == true) {
-				factor = parseFloat(document.getElementById("cantParcial").value)/100; /*PARCIAL*/
+        		factor= 1;
+				factor2 = parseFloat(document.getElementById("cantParcial").value)/100; /*PARCIAL*/
 		}
 
 	
@@ -235,23 +277,74 @@
 	    document.getElementById("ivaServicios").value = ivaServicios.toLocaleString('es-AR', { style: 'currency', currency: 'ARS',
 	    minimumFractionDigits: 2 });
 
-	    if (document.getElementById("1").checked == true) {
-	    	 retIva = (importeBruto - comision) * 0.05;
+	    //PAGAR//
 
-	    }
+	    if (document.getElementById("pagar").checked == true){
 
-	    else if (document.getElementById("2").checked == true) {
-	    	retIva = (importeBruto - comision) * 0.07;
-	    }
+		    if (document.getElementById("1").checked == true) {
+		    	 retIva = (importeBruto - comision) * 0.05;
+		    	 retGcias2 = 0;
 
-	    else if (document.getElementById("3").checked == true) {
-	    	retIva = (importeBruto - comision) * 0.08;
-	    }
 
-	    cbuIva = iva - retIva - ivaServicios;
+		    }
+
+		    else if (document.getElementById("2").checked == true) {
+		    	retIva = (importeBruto - comision) * 0.07;
+		    	retGcias = ((importeBruto - comision) - minNI) * 0.02;
+		    	calcularGanancias();
+		    }
+
+		    else if (document.getElementById("3").checked == true) {
+		    	retIva = (importeBruto - comision) * 0.08;
+		    	retGcias = ((importeBruto - comision) - minNI) * 0.15;
+		    	calcularGanancias();
+		    }
+
+		   
+		    cbuIva = iva - retIva - ivaServicios;
+		    retIB = importeBruto * 0.0075;
+	    
+		}
+
+		
+
+		if (document.getElementById("canje").checked == true){
+
+		   	retIva = (importeBruto - comision) * 0.01;
+		    cbuIva = 0;
+	    	retGcias2 = 0;
+	    	retIB = importeBruto * 0.0075;
+
+		}
+
+
+		if (document.getElementById("Normal").checked == true){
+
+		   	aFinal=0;
+	    	neto = subtotalBruto - comision - ivaServicios - retGcias2 - retIva - sellado - retIB - cbuIva;
+
+		}
+
+		if (document.getElementById("Parcial").checked == true){
+
+		   	aFinal= importeBruto * (1-factor2);
+	    	neto = subtotalBruto - comision - ivaServicios - retGcias2 - retIva - sellado - retIB - cbuIva - aFinal;
+	    	
+
+		}
+
+		
 	    document.getElementById("retIva").value = retIva.toLocaleString('es-AR', { style: 'currency', currency: 'ARS',
 	    minimumFractionDigits: 2 });
+	    document.getElementById("retGcias2").value = retGcias2.toLocaleString('es-AR', { style: 'currency', currency: 'ARS',
+	    minimumFractionDigits: 2 });
+	    document.getElementById("retIB").value = retIB.toLocaleString('es-AR', { style: 'currency', currency: 'ARS',
+	    minimumFractionDigits: 2 });
 	    document.getElementById("cbuIva").value = cbuIva.toLocaleString('es-AR', { style: 'currency', currency: 'ARS',
+	    minimumFractionDigits: 2 });
+	    document.getElementById("aFinal").value = aFinal.toLocaleString('es-AR', { style: 'currency', currency: 'ARS',
+	    minimumFractionDigits: 2 });
+	    document.getElementById("neto").value = neto.toLocaleString('es-AR', { style: 'currency', currency: 'ARS',
 	    minimumFractionDigits: 2 });
 
 
@@ -272,40 +365,50 @@
 </head>
 
 <body onload="alCargar()">
-	<div class="titPpal">
-		<h2 class="tituloPrincipal">Simulador liquidaciones/canjes</h2>
+<div class="container" >
+	
+	<div class="row titPpal">
+		<h2 class="col-xl-12 tituloPrincipal">Simulación liquidaciones/canje</h2>
 	</div>
+	
+
 <form class="formulario" >
-	<section class="section">
-		<div class="tipos">
+	<section class="row justify-content-around section"> 
+		<div class="col-lg-2 tipos">
 			<h3 class="enunciado">Tipo de operación</h3>
 			<input type="radio" id="pagar" name="tipoOperacion" value="pagar">
 			<label for="pagar">Para pagar</label><br>
 			<input type="radio" id="canje" name="tipoOperacion" value="canje">
 			<label for="canje">Canje</label><br>
 		</div>
-		<div class="tipos">
+		<div class="col-lg-2 tipos">
 			<h3 class="enunciado">Normal o parcial</h3>
 			<input type="radio" id="Normal" name="parcialNormal" value="Normal" onclick="normal()">
 			<label for="Normal">Normal</label><br>
 			<input type="radio" id="Parcial" name="parcialNormal" value="Parcial" onclick="parcial()">
 			<label for="Parcial">Parcial</label><br>
 		</div>
-		<div class="tipos">
+		<div class="col-lg-2 tipos">
 		<h3 class="enunciado">SISA</h3>
-			<input type="radio" id="1" name="sisa" value="1">
-			<label for="1">1</label><br>
-			<input type="radio" id="2" name="sisa" value="2">
-			<label for="2">2</label><br>
-			<input type="radio" id="3" name="sisa" value="3">
-			<label for="3">3</label>	
+			<p class="inputSisa">
+				<input type="radio" id="1" name="sisa" value="1">
+				<label for="1"> 1 </label>
+			</p>	
+			<p class="inputSisa">
+				<input type="radio" id="2" name="sisa" value="2">
+				<label for="2"> 2 </label>
+			</p>
+			<p class="inputSisa">
+				<input type="radio" id="3" name="sisa" value="3">
+				<label for="3">3</label>
+			</p>	
 		</div>
 	
-		<div class="tipos">
+		<div class="col-lg-2 tipos">
 		  	<label for="factor" class="enunciado">FACTOR</label><br>
-		  	<input type="number" id="factor" name="factor" placeholder="Ingrese factor" class="input"  onkeypress="return valideKey(event);" onfocus="funcionFocus(this)" onblur="funcionBlur(this)">
+		  	<input type="number" id="factor" class="factor" name="factor" placeholder="Ingrese factor" class="input"  onkeypress="return valideKey(event);" onfocus="funcionFocus(this)" onblur="funcionBlur(this)">
 	  	</div>
-	  	<div class="tipos">
+	  	<div class="col-lg-2 tipos">
 			<label for="cantParcial" class="enunciado">Parcial al </label>
 			<select id="cantParcial" name="cantParcial">
 				<option value="97.5">97.5</option>
@@ -314,27 +417,34 @@
 			</select>
 		</div>
 	</section>	
-	<section class="section">
-		<div class="tipos2">
+	<section class="row section">
+		<div class="col-lg-4 tipos2">
 			<label for="kilos" class="enunciado"><a href="#" data-toggle="popover" data-trigger="hover" title="KILOS" data-content="Ponga la cantidad de kilos a liquidar">KILOS</a></label><br>
 			<input type="number" id="kilos" name="kilos" placeholder="Ingrese kilos" class="input" onkeypress="return valideKey(event);" onfocus="funcionFocus(this)" onblur="funcionBlur(this)"><br>
 		</div>
-		<div class="tipos2">
+		<div class="col-lg-4 tipos2">
 			<label for="usd" class="enunciado"><a href="#" data-toggle="popover" data-trigger="hover" title="USD" data-content="Ingrese precio en USD del CTO (Usar coma para decimales)">USD</a></label><br>
 			<input type="number" id="usd" name="usd" placeholder="Precio en dólares" class="input" onkeypress="return valideKey(event);" onfocus="funcionFocus(this)" onblur="funcionBlur(this)"><br>
 		</div>
-		<div class="tipos2">
+		<div class="col-lg-4 tipos2">
 			<label for="tipoDeCambio" class="enunciado"><a href="#" data-toggle="popover" data-trigger="hover" title="Tipo de cambio" data-content="BNA comprador divisa (Usar coma para decimales)">TIPO DE CAMBIO</a></label><br>
 			<input type="number" id="tipoDeCambio" name="tipoDeCambio" placeholder="Tipo de cambio del día" class="input" onkeypress="return valideKey(event);" onfocus="funcionFocus(this)" onblur="funcionBlur(this)"><br>
 		</div>
+		
 	</section>
-	<section class="section">
+	
+	<div class="row section">
+	<section class="col-xl-12 tipos2">
 		<input type="button" value="Calcular" class="button button2" onclick="asignar()">
 	</section>
+	</div>
 </form> 
+
+
+
 <main class="resultados">
-	<section class="section">
-		<div class="tipos2">
+	<section class="row section">
+		<div class="col-lg-3 tipos2">
 			<label for="" class="enunciado">Importe bruto</label><br>
 			<textarea name="" id="importeBruto" cols="20" rows="1" readonly></textarea><br>
 			<label for="" class="enunciado">IVA</label><br>
@@ -342,7 +452,7 @@
 			<label for="" class="enunciado">Subtotal bruto</label><br>
 			<textarea name="" id="subtotalBruto" cols="20" rows="1"></textarea><br>
 		</div>
-		<div class="tipos2">
+		<div class="col-lg-3 tipos2">
 			<label for="" class="enunciado">Comisión</label><br>
 			<textarea name="" id="comision" cols="20" rows="1"></textarea><br>
 			<label for="" class="enunciado">Sellado</label><br>
@@ -350,7 +460,7 @@
 			<label for="" class="enunciado">IVA Servicios</label><br>
 			<textarea name="" id="ivaServicios" cols="20" rows="1"></textarea>
 		</div>
-		<div class="tipos2">
+		<div class="col-lg-3 tipos2">
 			<label for="" class="enunciado">Ret. IVA</label><br>
 			<textarea name="" id="retIva" cols="20" rows="1"></textarea><br>
 			<label for="" class="enunciado">Ret Gcias</label><br>
@@ -358,15 +468,17 @@
 			<label for="" class="enunciado">Ret IIBB Bs As</label><br>
 			<textarea name="" id="retIB" cols="20" rows="1"></textarea><br>
 		</div>
-		<div class="tipos2">
+		<div class="col-lg-3 tipos2">
 			<label for="" class="enunciado">A cobrar en la final</label><br>
-			<textarea name="" id="" cols="20" rows="1"></textarea><br>
+			<textarea name="" id="aFinal" cols="20" rows="1"></textarea><br>
 			<label for="" class="enunciado">CBU IVA</label><br>
 			<textarea name="" id="cbuIva" cols="20" rows="1"></textarea><br>
 			<label for="" class="enunciado">Neto a pagar/canje</label><br>
-			<textarea name="" id="" cols="20" rows="1"></textarea><br>
+			<textarea name="" id="neto" cols="20" rows="1"></textarea><br>
 		</div>
 	</section>
 </main>
+
+</div>
 </body>
 </html>
