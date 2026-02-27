@@ -256,12 +256,19 @@
 
 	
 	
-		importeBruto = kilos/1000 * usd * tipoDeCambio * factor;
+		/*importeBruto = kilos/1000 * usd * tipoDeCambio * factor;
 		iva = importeBruto * 0.105;
 		subtotalBruto = importeBruto + iva;
 		comision = importeBruto * 0.02;
         sellado = subtotalBruto * 0.0125;
+        ivaServicios = comision * 0.105;*/
+		importeBruto = kilos/1000 * usd * tipoDeCambio * factor;
+		iva = importeBruto * 0.105;
+		subtotalBruto = importeBruto + iva;
+		comision = importeBruto * 0.02;
+        //sellado = subtotalBruto * 0.0125;//
         ivaServicios = comision * 0.105;
+        sellado = (comision + ivaServicios) * 0.0125;
 
 
 		document.getElementById("importeBruto").value = importeBruto.toLocaleString('es-AR', { style: 'currency', currency: 'ARS',
